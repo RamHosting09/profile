@@ -7,11 +7,11 @@
     <style>
         :root {
             --primary-color: #3a86ff;
-            --secondary-color: #1a1a2e;
-            --accent-color: #ffbe0b;
-            --text-color: #f8f9fa;
+            --secondary-color: #14213d;
+            --accent-color: #fca311;
+            --text-color: #e5e5e5;
             --bg-color: #0a0a0a;
-            --card-bg: #1e1e1e;
+            --card-bg: #1a1a1a;
             --border-radius: 8px;
             --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
@@ -27,6 +27,8 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
+            padding: 0;
+            margin: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -54,18 +56,18 @@
         }
         
         .profile-pic {
-            width: 180px;
-            height: 180px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--accent-color);
+            border: 4px solid var(--primary-color);
             margin-bottom: 1rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease;
         }
         
         .profile-pic:hover {
-            transform: scale(1.05);
+            transform: rotate(5deg) scale(1.05);
         }
         
         h1 {
@@ -118,10 +120,9 @@
         .contact-item {
             display: flex;
             align-items: center;
-            padding: 1rem;
+            padding: 0.8rem;
             transition: all 0.3s ease;
             border-radius: var(--border-radius);
-            background-color: rgba(58, 134, 255, 0.05);
         }
         
         .contact-item:hover {
@@ -182,17 +183,20 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="container">
             <div class="profile-header">
-                <!-- Foto kucing random dengan aksesoris berbeda setiap load -->
-                <img id="randomCat" src="" alt="Foto Profil Kucing" class="profile-pic">
+                <!-- Foto kucing random dengan aksesoris berbeda setiap refresh -->
+                <img src="https://cataas.com/cat?width=300&height=300&accessories=1&glasses=1&hat=1&filter=sepia&type=square" 
+                     alt="Foto Profil Kucing" 
+                     class="profile-pic"
+                     id="random-cat">
                 
                 <h1>Ram Hostinger</h1>
-                <p class="profession">Web Hosting Specialist</p>
+                <p class="profession">Web Professional</p>
             </div>
         </div>
     </header>
@@ -231,39 +235,27 @@
     </footer>
     
     <script>
-        // Update tahun otomatis
+        // Auto update tahun
         document.getElementById('year').textContent = new Date().getFullYear();
         
-        // Fungsi untuk gambar kucing random dengan aksesoris berbeda
-        function getRandomCat() {
-            const accessories = [
-                '&accessories=1', // kacamata
-                '&hats=1', // topi
-                '&glasses=1', // kacamata hitam
-                '&clothes=1', // baju
-                '&filter=sepia', // efek sepia
-                '&filter=mono', // hitam putih
-                '', // tanpa aksesoris
-            ];
+        // Random cat image dengan parameter berbeda setiap load
+        const catImage = document.getElementById('random-cat');
+        const randomParams = () => {
+            const accessories = Math.random() > 0.5 ? 1 : 0;
+            const glasses = Math.random() > 0.5 ? 1 : 0;
+            const hat = Math.random() > 0.5 ? 1 : 0;
+            const filters = ['', 'sepia', 'mono', 'negative', 'paint', 'pixel'];
+            const randomFilter = filters[Math.floor(Math.random() * filters.length)];
             
-            const randomAccessory = accessories[Math.floor(Math.random() * accessories.length)];
-            const catApiUrl = `https://cataas.com/cat?width=400&height=400${randomAccessory}`;
-            
-            // Preload gambar untuk menghindari flicker
-            const img = new Image();
-            img.src = catApiUrl;
-            img.onload = function() {
-                document.getElementById('randomCat').src = catApiUrl;
-            };
-        }
-        
-        // Panggil fungsi saat halaman dimuat
-        window.onload = function() {
-            getRandomCat();
-            
-            // Ganti gambar setiap 30 detik (opsional)
-            setInterval(getRandomCat, 30000);
+            return `width=300&height=300&accessories=${accessories}&glasses=${glasses}&hat=${hat}&filter=${randomFilter}&type=square`;
         };
+        
+        catImage.src = `https://cataas.com/cat?${randomParams()}`;
+        
+        // Ganti gambar setiap 10 detik (opsional)
+        setInterval(() => {
+            catImage.src = `https://cataas.com/cat?${randomParams()}`;
+        }, 10000);
     </script>
 </body>
 </html>
